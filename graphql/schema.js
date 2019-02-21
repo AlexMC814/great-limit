@@ -1,5 +1,6 @@
 exports.typeDefs = `
 type User {
+    _id: ID
     userName: String! @unique
     password: String!
     email: String!
@@ -8,6 +9,7 @@ type User {
     comments: [Video]
 }
 type Video{
+    _id: ID
     videoTitle: String!
     category: String!
     description: String!
@@ -19,4 +21,9 @@ type Video{
 type Query {
     getAllVideos: [Video]
 }
+
+type Mutation {
+    addVideo(videoTitle: String!, category: String!, description: String!, userName: String): Video
+}
+
 `;
