@@ -1,21 +1,42 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import { SIGNUP_USER } from '../../queries';
+import { withRouter } from 'react-router-dom';
 
 import Error from '../../components/UI/Error/Error';
 
-export default class SignUp extends Component {
+const initialState = {
+  userName: '',
+  email: '',
+  password: '',
+  passwordConfirmaton: '',
+};
+
+class SignUp extends Component {
   state = {
-    userName: '',
-    email: '',
-    password: '',
-    passwordConfirmaton: '',
+    ...initialState,
+  };
+
+  clearState = () => {
+    this.setState({ ...initialState });
+  };
+
+  validateForm = () => {
+    const { userName, email, password, passwordConfirmation } = this.state;
+    const isInvalid =
+      !userName || !email || !password || password !== passwordConfirmation;
+
+    return isInvalid;
   };
 
   submitHandler = (event, signUpUser) => {
     event.preventDefault();
-    signUpUser().then(data => {
+    signUpUser().then(async ({ data }) => {
       console.log(data);
+      localStorage.setItem('token', data.signUpUser.token);
+      await this.props.refetch();
+      this.clearState();
+      this.props.history.push('/');
     });
   };
 
@@ -67,7 +88,9 @@ export default class SignUp extends Component {
                   value={passwordConfirmaton}
                   onChange={this.changeHandler}
                 />
-                <button type='submit'>Отправить</button>
+                <button type='submit' disabled={loading || this.validateForm()}>
+                  Отправить
+                </button>
               </form>
             );
           }}
@@ -76,3 +99,5 @@ export default class SignUp extends Component {
     );
   }
 }
+
+export default withRouter(SignUp);

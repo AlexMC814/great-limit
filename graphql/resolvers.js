@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const createToken = (user, secret, expiresIn) => {
   const { userName, email } = user;
@@ -9,6 +10,19 @@ exports.resolvers = {
   Query: {
     getAllVideos: async (root, args, { VideoSchema }) => {
       return await VideoSchema.find();
+    },
+    getCurrentUser: async (root, args, { currentUser, UserSchema }) => {
+      if (!currentUser) {
+        return null;
+      }
+
+      const user = await UserSchema.findOne({
+        userName: currentUser.userName,
+      }).populate({
+        path: 'comments',
+        model: 'Video',
+      });
+      return user;
     },
   },
 
@@ -25,6 +39,21 @@ exports.resolvers = {
         userName,
       }).save();
       return newVideo;
+    },
+
+    signInUser: async (root, { userName, password }, { UserSchema }) => {
+      const user = await UserSchema.findOne({ userName });
+      if (!user) {
+        throw new Error('Пользователь с таким именем не найден');
+      }
+
+      const isValidPassword = await bcrypt.compare(password, user.password);
+
+      if (!isValidPassword) {
+        throw new Error('Пароль неверен');
+      }
+
+      return { token: createToken(user, process.env.SECRET, '6hr') };
     },
 
     signUpUser: async (root, { userName, email, password }, { UserSchema }) => {

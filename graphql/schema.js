@@ -20,6 +20,8 @@ exports.typeDefs = `
 
     type Query {
         getAllVideos: [Video]
+
+        getCurrentUser: User
     }
 
     type Token {
@@ -28,6 +30,8 @@ exports.typeDefs = `
 
     type Mutation {
         addVideo( title: String!, category: String!, description: String!, userName: String): Video
+
+        signInUser(userName: String!, password: String!): Token
 
         signUpUser(userName: String!, email: String!, password: String!): Token
     }

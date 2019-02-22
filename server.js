@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config({ path: 'variables.env' });
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 
 // Mongoose schema imports
 const VideoSchema = require('./models/Video');
@@ -36,6 +37,20 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Set up jwt authentication middleware
+app.use(async (req, res, next) => {
+  const token = req.headers['authorization'];
+  if (token !== 'null') {
+    try {
+      const currentUser = await jwt.verify(token, process.env.SECRET);
+      req.currentUser = currentUser;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  next();
+});
+
 app.use(
   '/graphiql',
   graphiqlExpress({
@@ -46,13 +61,14 @@ app.use(
 app.use(
   '/graphql',
   bodyParser.json(),
-  graphqlExpress({
+  graphqlExpress(({ currentUser }) => ({
     schema,
     context: {
       UserSchema,
       VideoSchema,
+      currentUser,
     },
-  })
+  }))
 );
 
 const PORT = process.env.PORT || 4444;
