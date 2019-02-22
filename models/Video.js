@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const VideoSchema = new Schema({
-  videoTitle: {
+  title: {
     type: String,
     required: true,
   },

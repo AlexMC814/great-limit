@@ -1,3 +1,10 @@
+const jwt = require('jsonwebtoken');
+
+const createToken = (user, secret, expiresIn) => {
+  const { userName, email } = user;
+  return jwt.sign({ userName, email }, secret, { expiresIn });
+};
+
 exports.resolvers = {
   Query: {
     getAllVideos: async (root, args, { VideoSchema }) => {
@@ -8,16 +15,31 @@ exports.resolvers = {
   Mutation: {
     addVideo: async (
       root,
-      { videoTitle, category, description, userName },
+      { title, category, description, userName },
       { VideoSchema }
     ) => {
       const newVideo = await new VideoSchema({
-        videoTitle,
+        title,
         category,
         description,
         userName,
       }).save();
       return newVideo;
+    },
+
+    signUpUser: async (root, { userName, email, password }, { UserSchema }) => {
+      const user = await UserSchema.findOne({ userName });
+
+      if (user) {
+        throw new Error('Пользователь с таким именем уже существует');
+      }
+
+      const newUser = await new UserSchema({
+        userName,
+        email,
+        password,
+      }).save();
+      return { token: createToken(newUser, process.env.SECRET, '6hr') };
     },
   },
 };
