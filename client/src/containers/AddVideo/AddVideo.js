@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import { ADD_VIDEO } from '../../queries';
+import { ADD_VIDEO, GET_ALL_VIDEOS } from '../../queries';
 import { withRouter } from 'react-router-dom';
 
 import Error from '../../components/UI/Error/Error';
@@ -43,6 +43,18 @@ class AddVideo extends Component {
         return isInvalid;
     }
 
+    updateCache = (cache, { data: { addVideo } }) => {
+        const { getAllVideos } = cache.readQuery({ query: GET_ALL_VIDEOS });
+        // console.log('from cache:', getAllVideos);
+        // console.log('from data:', addVideo);
+        cache.writeQuery({
+            query: GET_ALL_VIDEOS,
+            data: {
+                getAllVideos: [addVideo, ...getAllVideos]
+            }
+        });
+    }
+
     componentDidMount() {
         this.setState({
             userName: this.props.session.getCurrentUser.userName
@@ -53,7 +65,7 @@ class AddVideo extends Component {
     render() {
         const { title, category, description, userName } = this.state;
         return (
-            <Mutation mutation={ADD_VIDEO} variables={{ title, category, description, userName }}>
+            <Mutation mutation={ADD_VIDEO} variables={{ title, category, description, userName }} update={this.updateCache}>
                 {(addVideo, { data, loading, error }) => {
                     return (
                         <div>

@@ -63,7 +63,7 @@ const Root = ({ refetch, session }) => {
           <Route path='/signin' render={() => <SignIn refetch={refetch} />} />
           <Route path='/signup' render={() => <SignUp refetch={refetch} />} />
           <Route path='/video/add' render={() => <AddVideo session={session} />} />
-          <Route path='/profile' component={Profile} />
+          <Route path='/profile' render={() => <Profile session={session} />} />
           <Route path='/blog' component={Blog} />
           <Route path='/videos/:_id' component={VideoPage} />
           <Redirect to='/' />

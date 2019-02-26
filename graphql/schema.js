@@ -21,7 +21,9 @@ exports.typeDefs = `
     type Query {
         getAllVideos: [Video]
         getVideo(_id: ID!): Video
+        searchVideos(searchTerm: String): [Video]
         getCurrentUser: User
+        getUserVideos(userName: String!): [Video]
     }
 
     type Token {

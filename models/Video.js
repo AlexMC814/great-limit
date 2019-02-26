@@ -25,4 +25,8 @@ const VideoSchema = new Schema({
   comments: String,
 });
 
+VideoSchema.index({
+  "$**": "text"
+});
+
 module.exports = mongoose.model('Video', VideoSchema);

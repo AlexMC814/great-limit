@@ -28,6 +28,16 @@ export const GET_VIDEO = gql`
 }
 `
 
+export const SEARCH_VIDEOS = gql`
+  query($searchTerm: String) {
+    searchVideos(searchTerm: $searchTerm) {
+      _id
+      title
+      comments
+    }
+  }
+`;
+
 /* Video Mutations */
 export const ADD_VIDEO = gql`
    mutation($title: String!, $category: String!, $description: String!, $userName: String) {
@@ -50,9 +60,23 @@ export const GET_CURRENT_USER = gql`
       userName
       joinDate
       email
-    }
+      comments {
+        _id
+        title
+      }
+    } 
   }
 `;
+
+export const GET_USER_VIDEOS = gql`
+  query($userName: String!) {
+    getUserVideos(userName: $userName) {
+      _id
+      title
+      comments
+    }
+  }
+`
 
 /* User Mutations */
 export const SIGNIN_USER = gql`

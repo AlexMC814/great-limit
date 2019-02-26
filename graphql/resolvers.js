@@ -15,11 +15,33 @@ exports.resolvers = {
       });
     },
 
+    searchVideos: async (root, { searchTerm }, { VideoSchema }) => {
+      if (searchTerm) {
+        const searchResults = await VideoSchema.find({
+          $text: { $search: searchTerm },
+        }, {
+            score: { $meta: "textScore" }
+          }).sort({
+            score: { $meta: "textScore" }
+          });
+        return searchResults;
+      } else {
+        const videos = await VideoSchema.find().sort({ createdDate: 'desc' });
+        return videos;
+      }
+    },
+
     getVideo: async (root, { _id }, { VideoSchema }) => {
       const video = await VideoSchema.findOne({ _id });
       return video;
     },
 
+    getUserVideos: async (root, { userName }, { VideoSchema }) => {
+      const userVideos = await VideoSchema.find({ userName }).sort({
+        createdDate: 'desc'
+      });
+      return userVideos;
+    },
     getCurrentUser: async (root, args, { currentUser, UserSchema }) => {
       if (!currentUser) {
         return null;
