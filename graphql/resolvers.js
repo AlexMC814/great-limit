@@ -8,14 +8,22 @@ const createToken = (user, secret, expiresIn) => {
 
 exports.resolvers = {
   Query: {
+
     getAllVideos: async (root, args, { VideoSchema }) => {
-      return await VideoSchema.find();
+      return await VideoSchema.find().sort({
+        createdDate: 'desc'
+      });
     },
+
+    getVideo: async (root, { _id }, { VideoSchema }) => {
+      const video = await VideoSchema.findOne({ _id });
+      return video;
+    },
+
     getCurrentUser: async (root, args, { currentUser, UserSchema }) => {
       if (!currentUser) {
         return null;
       }
-
       const user = await UserSchema.findOne({
         userName: currentUser.userName,
       }).populate({
@@ -23,7 +31,7 @@ exports.resolvers = {
         model: 'Video',
       });
       return user;
-    },
+    }
   },
 
   Mutation: {

@@ -20,7 +20,7 @@ exports.typeDefs = `
 
     type Query {
         getAllVideos: [Video]
-
+        getVideo(_id: ID!): Video
         getCurrentUser: User
     }
 

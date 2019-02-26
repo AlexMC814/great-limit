@@ -3,6 +3,7 @@ import './Landing.scss';
 
 import { Query } from 'react-apollo';
 import { GET_ALL_VIDEOS } from '../../queries';
+import VideoItem from '../../components/UI/VideoItem/VideoItem';
 
 const Landing = () => (
   <div className='Landing'>
@@ -13,7 +14,11 @@ const Landing = () => (
         if (error) return <div>{error}</div>;
         console.log(data);
 
-        return <p>Videos</p>;
+        return <ul>{data.getAllVideos.map((video) => {
+          return (
+            <VideoItem key={video._id} {...video} />
+          )
+        })}</ul>;
       }}
     </Query>
   </div>

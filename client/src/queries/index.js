@@ -5,17 +5,43 @@ import { gql } from 'apollo-boost';
 export const GET_ALL_VIDEOS = gql`
   query {
     getAllVideos {
+      _id
       title
       category
       description
       userName
-      comments
-      createdDate
-    }
+    },
   }
 `;
 
+export const GET_VIDEO = gql`
+  query($_id:ID!) {
+    getVideo(_id:$_id){
+      _id
+      title
+      category
+      description
+      createdDate
+      userName
+      comments
+    }
+}
+`
+
 /* Video Mutations */
+export const ADD_VIDEO = gql`
+   mutation($title: String!, $category: String!, $description: String!, $userName: String) {
+     addVideo(title: $title, category: $category, description: $description, userName: $userName) {
+      _id
+      title
+      category
+      description
+      userName
+      createdDate
+      comments
+     }
+   }
+`
 
 /* User Queries */
 export const GET_CURRENT_USER = gql`
