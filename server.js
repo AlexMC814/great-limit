@@ -8,6 +8,8 @@ const jwt = require('jsonwebtoken');
 // Mongoose schema imports
 const VideoSchema = require('./models/Video');
 const UserSchema = require('./models/User');
+const VideoCommentSchema = require('./models/VideoComment');
+const BlogCommentSchema = require('./models/BlogComment');
 
 // GraphQl schemas imports
 const { typeDefs } = require('./graphql/schema');
@@ -17,7 +19,7 @@ const { resolvers } = require('./graphql/resolvers');
 const { graphiqlExpress, graphqlExpress } = require('apollo-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
 
-// Initialze express schema with graphql types and sesolvers
+// Initialze express schema with graphql types and resolvers
 const schema = makeExecutableSchema({
   typeDefs: typeDefs,
   resolvers: resolvers,
@@ -66,6 +68,8 @@ app.use(
     context: {
       UserSchema,
       VideoSchema,
+      VideoCommentSchema,
+      BlogCommentSchema,
       currentUser,
     },
   }))

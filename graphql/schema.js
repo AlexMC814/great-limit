@@ -1,4 +1,5 @@
 exports.typeDefs = `
+
     type User {
         _id: ID
         userName: String! @unique
@@ -6,16 +7,42 @@ exports.typeDefs = `
         email: String!
         joinDate: String
         isAdmin: Boolean
-        comments: [Video]
+        hasSubscription: Boolean
     }
+
     type Video {
         _id: ID
         title: String!
         category: String!
         description: String!
         createdDate: String
-        comments: String
         userName: String
+    }
+
+    type VideoComment {
+        _id: ID
+        comment: String!
+        createdDate: String
+        video: String!
+        user: String!
+    }
+
+    type ArticleComment {
+        _id: ID
+        comment: String!
+        createdDate: String
+        article: String!
+        user: String!
+    }
+
+    type Event {
+        _id: ID
+        title: String!
+        description: String!
+        price: Float!
+        date: String!
+        createdDate: String!
+        user: String
     }
 
     type Query {
@@ -24,6 +51,8 @@ exports.typeDefs = `
         searchVideos(searchTerm: String): [Video]
         getCurrentUser: User
         getUserVideos(userName: String!): [Video]
+        getVideoComments(video: String!): [VideoComment]
+        getUserComments(user: String!): [VideoComment]
     }
 
     type Token {
@@ -32,6 +61,10 @@ exports.typeDefs = `
 
     type Mutation {
         addVideo( title: String!, category: String!, description: String!, userName: String): Video
+
+        addVideoComment(video: String!, user: String!, comment: String!): VideoComment
+
+        deleteUserVideo(_id: ID): Video
 
         signInUser(userName: String!, password: String!): Token
 

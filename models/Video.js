@@ -22,11 +22,10 @@ const VideoSchema = new Schema({
   userName: {
     type: String,
   },
-  comments: String,
 });
 
 VideoSchema.index({
-  "$**": "text"
+  '$**': 'text',
 });
 
 module.exports = mongoose.model('Video', VideoSchema);

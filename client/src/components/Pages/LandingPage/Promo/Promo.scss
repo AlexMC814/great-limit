@@ -1,0 +1,13 @@
+@import '../../../../sass/utilities.scss';
+
+.promo {
+  h3,
+  strong {
+    color: black;
+  }
+
+  &__section-title {
+    padding: 10px 0;
+    border-bottom: 1px solid #000;
+  }
+}

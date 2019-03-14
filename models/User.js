@@ -24,9 +24,8 @@ const UserSchema = new Schema({
   isAdmin: {
     type: Boolean,
   },
-  comments: {
-    type: [Schema.Types.ObjectId],
-    ref: 'Video',
+  hasSubscription: {
+    type: Boolean,
   },
 });
 

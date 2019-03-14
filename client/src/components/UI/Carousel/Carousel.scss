@@ -1,0 +1,10 @@
+.carousel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &__wrapper {
+    position: relative;
+    min-height: 200px;
+  }
+}

@@ -1,0 +1,52 @@
+@import '../../../sass/variables.scss';
+
+.navbar {
+  position: fixed;
+  top: 40px;
+  left: 0;
+  width: 100%;
+  background-color: transparent;
+  transition: all 0.3s ease-in;
+
+  &.scrolled {
+    top: 0;
+    background-color: white;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+  }
+
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+
+    &-item {
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
+    }
+
+    &-link {
+      display: block;
+      padding: 10px;
+      background-color: transparent;
+      color: black;
+      font-weight: 600;
+      transition: all 0.3s ease-in-out;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.2);
+        color: white;
+      }
+
+      &.active {
+        background-color: rgba(0, 0, 0, 0.2);
+        color: white;
+      }
+    }
+  }
+}

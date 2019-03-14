@@ -1,0 +1,20 @@
+@import '../../../../sass/utilities.scss';
+
+.about {
+  &__img {
+    background: url('../../../../assets/images/LandingPage/img/about-alex-musarov.jpg')
+      center center no-repeat;
+    background-size: contain;
+    height: 450px;
+  }
+
+  &__bg {
+    position: absolute;
+    top: 20%;
+    left: 10%;
+
+    svg {
+      max-width: 100%;
+    }
+  }
+}

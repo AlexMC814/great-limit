@@ -1,14 +1,120 @@
+/* autoprefixer grid: autoplace */
+
+@import './normalize.scss';
+@import '../node_modules/gridlex/src/gridlex.scss';
+@import './sass/fonts.scss';
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 body {
+  background-color: black;
+  box-sizing: inherit;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Droid Sans', 'Helvetica Neue', 'PoiretOne-Regular',
+    'AmaticSC-Bold', 'AmaticSC-Regular', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+section {
+  padding: 25px 0;
+}
+
+footer {
+  padding: 50px 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'AmaticSC-Bold';
+  color: white;
+  font-weight: bold;
+  margin: 0 0 40px 0;
+}
+
+h1 {
+  font-size: 8vw;
+}
+
+h2 {
+  font-size: 7vw;
+}
+
+h3 {
+  font-size: 6vw;
+}
+
+h4 {
+  font-size: 5vw;
+}
+
+h5 {
+  font-size: 4vw;
+}
+
+h6 {
+  font-size: 3.5vw;
+}
+
+p,
+span,
+strong,
+a,
+li {
+  font-family: 'PoiretOne-Regular';
+  color: white;
+  font-size: 1.3vw;
+  letter-spacing: 1.5px;
+
+  @media screen and (max-width: 64em) {
+    font-size: 1.7vw;
+  }
+
+  @media screen and (max-width: 48em) {
+    font-size: 2vw;
+  }
+}
+
+p {
+  margin-top: 0;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+input {
+  background: transparent;
+  border: 1px solid white;
+  padding: 10px 20px;
+  color: white;
+  outline: none;
+
+  &::placeholder {
+    color: white;
+  }
+}
+
+.container {
+  position: relative;
+  width: 80%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 30px;
 }

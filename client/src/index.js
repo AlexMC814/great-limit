@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
@@ -8,18 +8,20 @@ import {
 } from 'react-router-dom';
 
 // Container Components
-import Landing from './containers/Landing/Landing';
-import SignIn from './containers/Auth/SignIn';
-import SignUp from './containers/Auth/SignUp';
-import AddVideo from './containers/AddVideo/AddVideo';
-import Profile from './containers/Profile/Profile';
-import Blog from './containers/Blog/Blog';
-import VideoPage from './containers/VideoPage/VideoPage';
+import LandingPage from './components/Pages/LandingPage/LandingPage';
+import SignInPage from './components/Pages/Auth/SignInPage/SignIn';
+import SignUpPage from './components/Pages/Auth/SignUpPage/SignUp';
+import AddVideoPage from './components/Pages/AddVideoPage/AddVideoPage';
+import ProfilePage from './components/Pages/ProfilePage/ProfilePage';
+import BlogPage from './components/Pages/BlogPage/BlogPage';
+import Video from './components/UI/Video/Video';
+import EventsPage from './components/Pages/EventsPage/EventsPage';
 
 // HOC imports
 import withSession from './hoc/withSession';
 
 // UI components
+import AuthBar from './components/UI/AuthBar/AuthBar';
 import Navbar from './components/UI/Navbar/Navbar';
 import Search from './components/UI/Search/Search';
 
@@ -43,8 +45,7 @@ const client = new ApolloClient({
   },
   onError: ({ networkError }) => {
     if (networkError) {
-      console.log('Network Error', networkError);
-
+      // console.log('Network Error', networkError);
       // if (networkError.statusCode === 401) {
       //   localStorage.removeItem('token');
       // }
@@ -52,26 +53,69 @@ const client = new ApolloClient({
   },
 });
 
-const Root = ({ refetch, session }) => {
-  return (
-    <Router>
-      <Fragment>
-        <Navbar session={session} />
-        <Switch>
-          <Route path='/' exact component={Landing} />
-          <Route path='/search' component={Search} />
-          <Route path='/signin' render={() => <SignIn refetch={refetch} />} />
-          <Route path='/signup' render={() => <SignUp refetch={refetch} />} />
-          <Route path='/video/add' render={() => <AddVideo session={session} />} />
-          <Route path='/profile' render={() => <Profile session={session} />} />
-          <Route path='/blog' component={Blog} />
-          <Route path='/videos/:_id' component={VideoPage} />
-          <Redirect to='/' />
-        </Switch>
-      </Fragment>
-    </Router>
-  );
-};
+class Root extends Component {
+  state = {
+    scrolled: false,
+  };
+
+  componentDidMount() {
+    window.addEventListener('scroll', () => {
+      const isTop = window.scrollY >= 100;
+      isTop
+        ? this.setState({
+            scrolled: true,
+          })
+        : this.setState({
+            scrolled: false,
+          });
+    });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll');
+  }
+
+  render() {
+    const { refetch, session } = this.props;
+
+    return (
+      <Router>
+        <Fragment>
+          <AuthBar session={session} scrolled={this.state.scrolled} />
+          <Navbar session={session} scrolled={this.state.scrolled} />
+          <Switch>
+            <Route path='/' exact component={LandingPage} />
+            <Route path='/search' component={Search} />
+            <Route
+              path='/signin'
+              render={() => <SignInPage refetch={refetch} />}
+            />
+            <Route
+              path='/signup'
+              render={() => <SignUpPage refetch={refetch} />}
+            />
+            <Route
+              path='/videos/add'
+              render={() => <AddVideoPage session={session} />}
+            />
+            <Route
+              path='/videos/:_id'
+              render={() => <Video session={session} />}
+            />
+            <Route
+              path='/profile'
+              render={() => <ProfilePage session={session} />}
+            />
+            <Route path='/events' render={() => <EventsPage />} />
+            <Route path='/articles' component={BlogPage} />
+            <Route path='/' />
+            <Redirect to='/' />
+          </Switch>
+        </Fragment>
+      </Router>
+    );
+  }
+}
 
 const RootWithSession = withSession(Root);
 

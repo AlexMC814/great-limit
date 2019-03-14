@@ -8,22 +8,24 @@ const createToken = (user, secret, expiresIn) => {
 
 exports.resolvers = {
   Query: {
-
     getAllVideos: async (root, args, { VideoSchema }) => {
       return await VideoSchema.find().sort({
-        createdDate: 'desc'
+        createdDate: 'desc',
       });
     },
 
     searchVideos: async (root, { searchTerm }, { VideoSchema }) => {
       if (searchTerm) {
-        const searchResults = await VideoSchema.find({
-          $text: { $search: searchTerm },
-        }, {
-            score: { $meta: "textScore" }
-          }).sort({
-            score: { $meta: "textScore" }
-          });
+        const searchResults = await VideoSchema.find(
+          {
+            $text: { $search: searchTerm },
+          },
+          {
+            score: { $meta: 'textScore' },
+          }
+        ).sort({
+          score: { $meta: 'textScore' },
+        });
         return searchResults;
       } else {
         const videos = await VideoSchema.find().sort({ createdDate: 'desc' });
@@ -38,10 +40,25 @@ exports.resolvers = {
 
     getUserVideos: async (root, { userName }, { VideoSchema }) => {
       const userVideos = await VideoSchema.find({ userName }).sort({
-        createdDate: 'desc'
+        createdDate: 'desc',
       });
       return userVideos;
     },
+
+    getVideoComments: async (root, { video }, { VideoCommentSchema }) => {
+      const videoComments = await VideoCommentSchema.find({ video }).sort({
+        createdDate: 'desc',
+      });
+      return videoComments;
+    },
+
+    getUserComments: async (root, { user }, { VideoCommentSchema }) => {
+      const videoComments = await VideoCommentSchema.find({ user }).sort({
+        createdDate: 'desc',
+      });
+      return videoComments;
+    },
+
     getCurrentUser: async (root, args, { currentUser, UserSchema }) => {
       if (!currentUser) {
         return null;
@@ -53,7 +70,7 @@ exports.resolvers = {
         model: 'Video',
       });
       return user;
-    }
+    },
   },
 
   Mutation: {
@@ -69,6 +86,24 @@ exports.resolvers = {
         userName,
       }).save();
       return newVideo;
+    },
+
+    deleteUserVideo: async (root, { _id }, { VideoSchema }) => {
+      const video = await VideoSchema.findOneAndRemove({ _id });
+      return video;
+    },
+
+    addVideoComment: async (
+      root,
+      { video, user, comment },
+      { VideoCommentSchema }
+    ) => {
+      const newComment = await new VideoCommentSchema({
+        video,
+        user,
+        comment,
+      }).save();
+      return newComment;
     },
 
     signInUser: async (root, { userName, password }, { UserSchema }) => {

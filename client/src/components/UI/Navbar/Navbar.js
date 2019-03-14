@@ -1,52 +1,86 @@
-import React, { Fragment } from 'react'
-import { NavLink } from 'react-router-dom';
-import SignOut from '../SignOut/SignOut';
+import React, { Fragment } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import Logo from '../../../assets/images/shared/Logo/Logo';
 
-const Navbar = ({ session }) => {
-    return (
-        <nav>
-            {session && session.getCurrentUser ? <NavbarAuth session={session} /> : <NavbarUnAuth />}
-        </nav>
-    )
-}
+import './Navbar.scss';
 
-const NavbarUnAuth = () => (
-    <ul>
-        <li>
-            <NavLink to="/" exact>Главная</NavLink>
+const NavBar = ({ session, scrolled }) => {
+  return (
+    <nav className={!scrolled ? 'navbar' : 'navbar scrolled'}>
+      {session && session.getCurrentUser ? (
+        <NavbarAuth session={session} scrolled={scrolled} />
+      ) : (
+        <NavbarUnAuth scrolled={scrolled} />
+      )}
+    </nav>
+  );
+};
+
+const NavbarUnAuth = ({ scrolled }) => (
+  <div className='container'>
+    <div className='navbar__wrapper'>
+      <div className='navbar__logo'>
+        <Link to='/'>
+          <Logo
+            title='logo-black'
+            width={!scrolled ? '120px' : '70px'}
+            height={!scrolled ? '120px' : '70px'}
+          />
+        </Link>
+      </div>
+      <ul className='navbar__nav'>
+        <li className='navbar__nav-item'>
+          <NavLink className='navbar__nav-link' to='/' exact>
+            Главная
+          </NavLink>
         </li>
-        <li>
-            <NavLink to="/search">Поиск</NavLink>
+        <li className='navbar__nav-item'>
+          <NavLink className='navbar__nav-link' to='/events'>
+            События
+          </NavLink>
         </li>
-        <li>
-            <NavLink to="/signin">Вход</NavLink>
+        <li className='navbar__nav-item'>
+          <NavLink className='navbar__nav-link' to='/articles'>
+            Статьи
+          </NavLink>
         </li>
-        <li>
-            <NavLink to="/signup" exact>Регистрация</NavLink>
-        </li>
-    </ul>
+      </ul>
+    </div>
+  </div>
 );
-const NavbarAuth = ({ session }) => (
-    <Fragment>
-        <ul>
-            <li>
-                <NavLink to="/" exact>Главная</NavLink>
-            </li>
-            <li>
-                <NavLink to="/search">Поиск</NavLink>
-            </li>
-            <li>
-                <NavLink to="/video/add">Добавить видео</NavLink>
-            </li>
-            <li>
-                <NavLink to="/profile">Профиль</NavLink>
-            </li>
-            <li>
-                <SignOut />
-            </li>
+const NavbarAuth = ({ session, scrolled }) => (
+  <Fragment>
+    <div className='container'>
+      <div className='navbar__wrapper'>
+        <div className='navbar__logo'>
+          <Link to='/'>
+            <Logo
+              title='logo-black'
+              width={!scrolled ? '120px' : '70px'}
+              height={!scrolled ? '120px' : '70px'}
+            />
+          </Link>
+        </div>
+        <ul className='navbar__nav'>
+          <li className='navbar__nav-item'>
+            <NavLink className='navbar__nav-link' to='/' exact>
+              Главная
+            </NavLink>
+          </li>
+          <li className='navbar__nav-item'>
+            <NavLink className='navbar__nav-link' to='/events'>
+              События
+            </NavLink>
+          </li>
+          <li className='navbar__nav-item'>
+            <NavLink className='navbar__nav-link' to='/articles'>
+              Статьи
+            </NavLink>
+          </li>
         </ul>
-        <h4>Привет, <strong>{session.getCurrentUser.userName}</strong></h4>
-    </Fragment>
+      </div>
+    </div>
+  </Fragment>
 );
 
-export default Navbar
+export default NavBar;

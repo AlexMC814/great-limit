@@ -1,0 +1,39 @@
+.footer {
+  color: white;
+
+  &__logo {
+    display: block;
+    margin-bottom: 30px;
+  }
+
+  &__title {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 2vw;
+    font-family: 'AmaticSC-Bold';
+  }
+
+  &__social {
+    display: flex;
+    justify-content: flex-end;
+
+    &-link {
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  &__menu-item {
+    width: auto;
+    &:not(:last-child) {
+      margin-bottom: 5px;
+    }
+  }
+
+  &__menu-link {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
